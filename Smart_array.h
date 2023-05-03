@@ -112,24 +112,21 @@ Smart_array<T>::Smart_array(const Smart_array<T>& other) {
 //Конструктор присваивания
 template<typename T>
 Smart_array<T>& Smart_array<T>::operator=(const Smart_array<T>& other) {
-	if (m_array != nullptr) {
+	if (this != &other) {
 		delete[] m_array;
 		m_array = nullptr;
-	}
 
-	m_capacity = other.m_capacity;
-	m_size = other.m_size;
-	if (m_capacity != 0) {
-		m_array = new T[m_capacity]{};
-		if (m_size > m_capacity) {
-			throw std::exception("Smart_array error");
+		m_capacity = other.m_capacity;
+		m_size = other.m_size;
+		if (m_capacity != 0) {
+			m_array = new T[m_capacity]{};
+			if (m_size > m_capacity) {
+				throw std::exception("Smart_array error");
+			}
+			for (size_t i = 0; i < m_size; ++i) {
+				m_array[i] = other.m_array[i];
+			}
 		}
-		for (size_t i = 0; i < m_size; ++i) {
-			m_array[i] = other.m_array[i];
-		}
-	}
-	else {
-		m_array = nullptr;
 	}
 
 	return *this;
@@ -137,9 +134,7 @@ Smart_array<T>& Smart_array<T>::operator=(const Smart_array<T>& other) {
 
 template<typename T>
 Smart_array<T>::~Smart_array() {
-	if (m_array != nullptr) {
-		delete[] m_array;
-	}
+	delete[] m_array;
 	m_array = nullptr;
 
 	//В деструкторе нельзя писать в поток вывода, это для примера работы программы.
